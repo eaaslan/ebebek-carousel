@@ -1,4 +1,3 @@
-// jQuery'yi dinamik olarak yükle
 (function loadjQuery() {
   const jqueryScript = document.createElement("script");
   jqueryScript.src = "https://code.jquery.com/jquery-3.6.0.min.js";
@@ -15,8 +14,7 @@
       let currentPosition = 0;
 
       const init = async () => {
-        // if (window.location.href === "https://www.e-bebek.com/") {
-        if (true) {
+        if (window.location.href === "https://www.e-bebek.com/") {
           await getProducts();
           const products = JSON.parse(localStorage.getItem("products"));
           buildStructure();
@@ -31,7 +29,7 @@
       const buildStructure = () => {
         const html = `
              <div class="ebebek-carousel">
-                <h2 class="carousel-title">Sizin icin Sectiklerimiz</h2>
+                <h2 class="carousel-title">Sizin için Seçtiklerimiz</h2>
                 <div class="carousel-container">
                     <button class="carousel-btn prev-btn"></button>
                     <div class="carousel-track-container">
@@ -42,12 +40,10 @@
             </div>
         `;
 
-        $(".container").prepend(html);
+        $(".Section2A").prepend(html);
       };
 
       const buildProductCards = (products) => {
-        //ad favorites local storage
-
         const track = $(".carousel-track");
 
         products.forEach((product) => {
@@ -102,21 +98,6 @@
 
           track.append(card);
         });
-
-        // $(".favorite-btn").hover(
-        //   function () {
-        //     $(this).find(".favorite-btn-inside").attr(
-        //       "src",
-        //       "https://www.e-bebek.com/assets/svg/default-hover-favorite.svg"
-        //     ).addClass("favorite-btn-inside-hover");
-        //   },
-        //   function () {
-        //     $(this).find(".favorite-btn-inside").attr(
-        //       "src",
-        //       "https://www.e-bebek.com/assets/svg/default-favorite.svg"
-        //     ).removeClass("favorite-btn-inside-hover");
-        //   }
-        // );
       };
 
       const isFavorite = (id) => {
@@ -161,7 +142,7 @@
                 border-top-right-radius: 35px;
                 font-family: Quicksand-Bold;
                 font-weight: 700;
-                font-size: 2rem;
+                font-size: 31px;
                 line-height: 1.11;
                 color: #f28e00;
               }
@@ -196,6 +177,7 @@
 
               .carousel-item:hover {
                 box-shadow: 0 0 0 0 #00000030,inset 0 0 0 3px #f28e00;
+                color:  #7d7d7d !important;
               }
 
               .product-item-img {
@@ -391,23 +373,10 @@
                 .ebebek-carousel {
                 max-width: 400px;
                 }}
-
-
-
           </style>
         `;
-
         $("head").append(css);
       };
-
-      //TODO : button padding
-      //TODO : favorite button
-      //TODO : prev next button on resize done
-      //TODO : sepete ekle tam boyutu ayarla
-      //TODO : butonlarda kendiliginden ok var , arka plan rengini ikisinide ayri ayri uygulamak zorunda kaldim
-      //TODO : add favorite functionality
-      //BUG : product hover color change
-      //TODO : add drag n drop functionality
 
       const fetchProducts = async () => {
         const response = await fetch(url);
@@ -428,15 +397,11 @@
           if (width >= 576) return 2;
           return 2;
         };
-        console.log($(window).width());
 
-        console.log(getItemsPerScreen());
         let items = $(".carousel-item").outerWidth(true);
-        console.log(items);
         let maxIndex = $(".carousel-item").length - getItemsPerScreen();
 
         $(".next-btn").click(() => {
-          console.log("max index: " + maxIndex);
           if (currentIndex >= maxIndex) return;
           currentPosition -= items + 20;
           track.css("transform", `translateX(${currentPosition}px)`);
@@ -485,10 +450,8 @@
         }
         return products;
       };
-
       init();
     })();
   };
-
   document.head.appendChild(jqueryScript);
 })();
