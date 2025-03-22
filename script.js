@@ -47,7 +47,7 @@
 
       const buildProductCards = (products) => {
         //ad favorites local storage
-        console.log(products);
+
         const track = $(".carousel-track");
 
         products.forEach((product) => {
@@ -90,7 +90,7 @@
                     </div>
                     <div class="favorite-btn">
                       <svg class="favorite-btn-empty ${
-                        isFavorite(product.id) ? "favorited-item" : ""
+                        isFavorite(product.id - 1) ? "favorited-item" : ""
                       }" xmlns="http://www.w3.org/2000/svg" width="26" height="23" viewBox="0 0 26 23" fill="none"><g id="Group 3"><g id="heart"><path id="Shape" fill-rule="evenodd" clip-rule="evenodd" d="M22.6339 2.97449C21.4902 1.83033 19.9388 1.1875 18.3211 1.1875C16.7034 1.1875 15.152 1.83033 14.0084 2.97449L12.8332 4.14968L11.658 2.97449C9.27612 0.592628 5.41435 0.592627 3.03249 2.97449C0.650628 5.35635 0.650628 9.21811 3.03249 11.6L4.20769 12.7752L12.8332 21.4007L21.4587 12.7752L22.6339 11.6C23.778 10.4564 24.4208 8.90494 24.4208 7.28723C24.4208 5.66952 23.778 4.11811 22.6339 2.97449Z" stroke="#FF8A00" stroke-width="2.17391" stroke-linecap="round" stroke-linejoin="round"/></g></g></svg>
                       <img src="https://www.e-bebek.com/assets/svg/default-hover-favorite.svg" alt="favorite" class="favorite-btn-hover" />
                     </div>
@@ -465,9 +465,9 @@
 
         $(".favorite-btn").click(function (event) {
           event.preventDefault();
-          event.stopPropagation();
+
           const id = $(this).closest(".carousel-item").index();
-          console.log(id);
+          debugger;
           if (isFavorite(id)) {
             removeFromFavorites(id);
             $(this).find(".favorite-btn-empty").removeClass("favorited-item");
