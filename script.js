@@ -14,8 +14,7 @@
       let currentPosition = 0;
 
       const init = async () => {
-        // if (window.location.href === "https://www.e-bebek.com/") {
-        if (true) {
+        if (window.location.href === "https://www.e-bebek.com/") {
           await getProducts();
           const products = JSON.parse(localStorage.getItem("products"));
           buildStructure();
@@ -41,8 +40,7 @@
             </div>
         `;
 
-        $("body").prepend(html);
-        // $(".Section2A").prepend(html);
+        $(".Section2A").prepend(html);
       };
 
       const buildProductCards = (products) => {
@@ -131,8 +129,8 @@
           .carousel-track-container{
           border-radius: 40px;
             -webkit-box-shadow: 8px 8px 15px 0px rgba(242,242,242,1);
--moz-box-shadow: 8px 8px 15px 0px rgba(242,242,242,1);
-box-shadow: 8px 8px 15px 0px rgba(242,242,242,1);
+            -moz-box-shadow: 8px 8px 15px 0px rgba(242,242,242,1);
+            box-shadow: 8px 8px 15px 0px rgba(242,242,242,1);
           }
           .ebebek-carousel {
             max-width: 1300px;
