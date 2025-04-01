@@ -62,7 +62,8 @@
       ];
 
       const init = async () => {
-        if (window.location.href === "https://www.e-bebek.com/") {
+        // if (window.location.href === "https://www.e-bebek.com/") {
+          if(true){
           await getProducts();
           const products = JSON.parse(localStorage.getItem("products"));
           buildStructure();
@@ -87,13 +88,15 @@
                 </div>
             </div>
         `;
-        $(".Section2A").prepend(html);
+       // $(".Section2A").prepend(html);
+       $(".carousel-container").append(html)
       };
 
       const buildProductCards = (products) => {
         const track = $(".carousel-track");
 
         products.forEach((product) => {
+
           const discount = Math.floor(
             ((product.original_price - product.price) /
               product.original_price) *
@@ -108,6 +111,10 @@
                       <div class="product-img">
                         <img src="${product.img}" alt="${product.name}" />
                       </div>
+                    </div>
+                   <div class="favorite-btn-wrapper ${
+                      FavoriteService.isFavorite(product.id) ? "favorited":""}">
+                   <button class="favorite-btn" aria-label="Add to favorites"></button>
                     </div>
                     <div class="product-item-content">
                       <div class="product-item-title">
@@ -132,12 +139,7 @@
                     </div>
                     <div class="dummy-product-list-promo">
                     </div>
-                    <div class="favorite-btn">
-                      <svg class="favorite-btn-empty ${
-                        isFavorite(product.id - 1) ? "favorited-item" : ""
-                      }" xmlns="http://www.w3.org/2000/svg" width="26" height="23" viewBox="0 0 26 23" fill="none"><g id="Group 3"><g id="heart"><path id="Shape" fill-rule="evenodd" clip-rule="evenodd" d="M22.6339 2.97449C21.4902 1.83033 19.9388 1.1875 18.3211 1.1875C16.7034 1.1875 15.152 1.83033 14.0084 2.97449L12.8332 4.14968L11.658 2.97449C9.27612 0.592628 5.41435 0.592627 3.03249 2.97449C0.650628 5.35635 0.650628 9.21811 3.03249 11.6L4.20769 12.7752L12.8332 21.4007L21.4587 12.7752L22.6339 11.6C23.778 10.4564 24.4208 8.90494 24.4208 7.28723C24.4208 5.66952 23.778 4.11811 22.6339 2.97449Z" stroke="#FF8A00" stroke-width="2.17391" stroke-linecap="round" stroke-linejoin="round"/></g></g></svg>
-                      <img src="https://www.e-bebek.com/assets/svg/default-hover-favorite.svg" alt="favorite" class="favorite-btn-hover" />
-                    </div>
+                    
                     <div class="product-item-actions">
                       <button type="submit" class="btn-item-add-to-cart">Sepete Ekle</button>
                     </div>
@@ -148,23 +150,25 @@
         });
       };
 
-      const isFavorite = (id) => {
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        return favorites.includes(id);
-      };
 
-      const addToFavorites = (id) => {
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        if (favorites.includes(id)) return;
-        favorites.push(id);
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-      };
 
-      const removeFromFavorites = (id) => {
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        const newFavorites = favorites.filter((favorite) => favorite !== id);
-        localStorage.setItem("favorites", JSON.stringify(newFavorites));
-      };
+      // const isFavorite = (id) => {
+      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      //   return favorites.includes(id);
+      // };
+
+      // const addToFavorites = (id) => {
+      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      //   if (favorites.includes(id)) return;
+      //   favorites.push(id);
+      //   localStorage.setItem("favorites", JSON.stringify(favorites));
+      // };
+
+      // const removeFromFavorites = (id) => {
+      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      //   const newFavorites = favorites.filter((favorite) => favorite !== id);
+      //   localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      // };
 
       const buildCSS = () => {
         const css = `
@@ -173,9 +177,7 @@
             .ebebek-carousel * {
               font-family: Poppins, "cursive";
             }
-
             .carousel-track-container {
-            
               border-radius: 40px;
               -webkit-box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
               -moz-box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
@@ -215,11 +217,11 @@
               display: flex;
               gap: 20px;
               transition: transform 0.25s ease-in-out;
-
               border-radius: 10px;
             }
 
             .carousel-item {
+              flex: 0 0 calc((100% - 60px) / 6);
               border: 1px solid #eee;
               border-radius: 10px;
               font-family: Poppins, "cursive";
@@ -258,48 +260,34 @@
               left: 15px;
               top: 10px;
             }
-
-            .favorite-btn {
+            .favorite-btn-wrapper {
               position: absolute;
+              top: 15px;
+              right: 15px;
+              height: 50px;
+              width: 50px;
               cursor: pointer;
               background-color: #fff;
               border-radius: 50%;
               box-shadow: 0 2px 4px 0 #00000024;
-              width: 50px;
-              height: 50px;
-              right: 15px;
-              top: 10px;
             }
 
-            .favorite-btn-empty {
-              width: 25px;
-              height: 25px;
-              left: 50%;
-              top: 50%;
-              transform: translate(-50%, -50%);
-              position: absolute;
+            .favorite-btn {
+              width:100%;
+              height: 100%;
+              border: none;
+              background: url('https://www.e-bebek.com/assets/svg/default-favorite.svg') no-repeat center;
             }
 
-            .favorited-item {
-              fill: #ff8a00;
+            .favorite-btn:hover {
+              cursor: pointer;
+              background: url('https://www.e-bebek.com/assets/svg/default-hover-favorite.svg') no-repeat center;
             }
 
-            .favorite-btn-hover {
-              display: none;
-              width: 50px;
-              height: 50px;
+           .favorite-btn-wrapper.favorited .favorite-btn {
+              background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 23"><path fill="%23FF8A00" fill-rule="evenodd" clip-rule="evenodd" d="M22.6339 2.97449C21.4902 1.83033 19.9388 1.1875 18.3211 1.1875C16.7034 1.1875 15.152 1.83033 14.0084 2.97449L12.8332 4.14968L11.658 2.97449C9.27612 0.592628 5.41435 0.592627 3.03249 2.97449C0.650628 5.35635 0.650628 9.21811 3.03249 11.6L4.20769 12.7752L12.8332 21.4007L21.4587 12.7752L22.6339 11.6C23.778 10.4564 24.4208 8.90494 24.4208 7.28723C24.4208 5.66952 23.778 4.11811 22.6339 2.97449Z" stroke="%23FF8A00" stroke-width="2.17391" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center;
+              background-size: 25px;
             }
-
-            .favorite-btn:not(:has(.favorited-item)):hover .favorite-btn-empty {
-              display: none;
-            }
-
-            .favorite-btn:not(:has(.favorited-item)):hover .favorite-btn-hover {
-              display: block;
-            }
-              .btn-item-add-to-cart{
-                cursor:pointer;
-              }
 
             .carousel-btn {
               height: 50px;
@@ -476,6 +464,7 @@
           (data) => data.productId === productId
         );
         const rating = ratingData ? ratingData.rating : 0;
+      
         let stars = ``;
         for (let i = 1; i <= 5; i++) {
           stars += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="17">
@@ -485,10 +474,45 @@
         </svg>`;
         }
         if (ratingData) {
-          stars += `  (${ratingData.count})`;
+          stars += `(${ratingData.count})`;
         }
         return stars;
       };
+
+
+      const FavoriteService={
+
+      storageKey:"favorites",
+
+      getAll(){
+          return JSON.parse(localStorage.getItem(this.storageKey)) || []
+      },
+
+      add(productId){
+          const favorites=this.getAll()
+          console.log(favorites.includes(4))
+          if(!favorites.includes(productId)) {
+            favorites.push(productId) 
+          localStorage.setItem(this.storageKey,JSON.stringify(favorites))
+        }
+      },
+
+      remove(productId){
+          const favorites=this.getAll()
+         const updatedFavorites= favorites.filter(itemId=> itemId!==productId)
+
+          localStorage.setItem(this.storageKey,JSON.stringify(updatedFavorites))
+      },
+
+      toggle(productId){
+          this.isFavorite(productId)? this.remove(productId) : this.add(productId) 
+      },
+
+      isFavorite(productId){
+        return this.getAll().includes(productId)
+      }
+
+      }
 
       const setEvents = () => {
         const track = $(".carousel-track");
@@ -532,18 +556,11 @@
           items = $(".carousel-item").outerWidth(true);
         });
 
-        $(".favorite-btn").click(function (event) {
+        $(".favorite-btn-wrapper").click(function (event) {
           event.preventDefault();
-
           const id = $(this).closest(".carousel-item").index();
-
-          if (isFavorite(id)) {
-            removeFromFavorites(id);
-            $(this).find(".favorite-btn-empty").removeClass("favorited-item");
-          } else {
-            addToFavorites(id);
-            $(this).find(".favorite-btn-empty").addClass("favorited-item");
-          }
+          FavoriteService.toggle(id+1) //products id start from 1
+          $(this).toggleClass("favorited",FavoriteService.isFavorite(id+1))
         });
 
         $(".btn-item-add-to-cart").click(function (event) {
