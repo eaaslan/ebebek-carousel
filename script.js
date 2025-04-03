@@ -509,7 +509,7 @@
           if (currentIndex >= maxIndex) return;
           currentPosition -= items + 20;
           track.css("transform", `translateX(${currentPosition}px)`);
-          currentPosition++;
+          
           currentIndex++;
         });
 
@@ -517,7 +517,7 @@
           if (currentIndex <= 0) return;
           currentPosition += items + 20;
           track.css("transform", `translateX(${currentPosition}px)`);
-          currentPosition--;
+         
           currentIndex--;
         });
 
