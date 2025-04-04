@@ -62,8 +62,8 @@
       ];
 
       const init = async () => {
-        // if (window.location.href === "https://www.e-bebek.com/") {
-          if(true){
+        if (window.location.href === "https://www.e-bebek.com/") {
+          // if(true){
           await getProducts();
           const products = JSON.parse(localStorage.getItem("products"));
           buildStructure();
@@ -88,15 +88,14 @@
                 </div>
             </div>
         `;
-       // $(".Section2A").prepend(html);
-       $(".carousel-container").append(html)
+        $(".Section2A").prepend(html);
+        //  $(".carousel-container").append(html)
       };
 
       const buildProductCards = (products) => {
         const track = $(".carousel-track");
 
         products.forEach((product) => {
-
           const discount = Math.floor(
             ((product.original_price - product.price) /
               product.original_price) *
@@ -113,7 +112,8 @@
                       </div>
                     </div>
                    <div class="favorite-btn-wrapper ${
-                      FavoriteService.isFavorite(product.id) ? "favorited":""}">
+                     FavoriteService.isFavorite(product.id) ? "favorited" : ""
+                   }">
                    <button class="favorite-btn" aria-label="Add to favorites"></button>
                     </div>
                     <div class="product-item-content">
@@ -149,8 +149,6 @@
           track.append(card);
         });
       };
-
-
 
       // const isFavorite = (id) => {
       //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -221,7 +219,7 @@
             }
 
             .carousel-item {
-              flex: 0 0 calc((100% - 60px) / 6);
+            
               border: 1px solid #eee;
               border-radius: 10px;
               font-family: Poppins, "cursive";
@@ -403,7 +401,7 @@
 
             @media (max-width: 1480px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 60px) / 4);
+                flex: 0 0 calc((100% - 70px) / 4);
               }
               .ebebek-carousel {
                 max-width: 1100px;
@@ -464,7 +462,7 @@
           (data) => data.productId === productId
         );
         const rating = ratingData ? ratingData.rating : 0;
-      
+
         let stars = ``;
         for (let i = 1; i <= 5; i++) {
           stars += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="17">
@@ -479,40 +477,44 @@
         return stars;
       };
 
+      const FavoriteService = {
+        storageKey: "favorites",
 
-      const FavoriteService={
+        getAll() {
+          return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+        },
 
-      storageKey:"favorites",
+        add(productId) {
+          const favorites = this.getAll();
+          console.log(favorites.includes(4));
+          if (!favorites.includes(productId)) {
+            favorites.push(productId);
+            localStorage.setItem(this.storageKey, JSON.stringify(favorites));
+          }
+        },
 
-      getAll(){
-          return JSON.parse(localStorage.getItem(this.storageKey)) || []
-      },
+        remove(productId) {
+          const favorites = this.getAll();
+          const updatedFavorites = favorites.filter(
+            (itemId) => itemId !== productId
+          );
 
-      add(productId){
-          const favorites=this.getAll()
-          console.log(favorites.includes(4))
-          if(!favorites.includes(productId)) {
-            favorites.push(productId) 
-          localStorage.setItem(this.storageKey,JSON.stringify(favorites))
-        }
-      },
+          localStorage.setItem(
+            this.storageKey,
+            JSON.stringify(updatedFavorites)
+          );
+        },
 
-      remove(productId){
-          const favorites=this.getAll()
-         const updatedFavorites= favorites.filter(itemId=> itemId!==productId)
+        toggle(productId) {
+          this.isFavorite(productId)
+            ? this.remove(productId)
+            : this.add(productId);
+        },
 
-          localStorage.setItem(this.storageKey,JSON.stringify(updatedFavorites))
-      },
-
-      toggle(productId){
-          this.isFavorite(productId)? this.remove(productId) : this.add(productId) 
-      },
-
-      isFavorite(productId){
-        return this.getAll().includes(productId)
-      }
-
-      }
+        isFavorite(productId) {
+          return this.getAll().includes(productId);
+        },
+      };
 
       const setEvents = () => {
         const track = $(".carousel-track");
@@ -559,8 +561,8 @@
         $(".favorite-btn-wrapper").click(function (event) {
           event.preventDefault();
           const id = $(this).closest(".carousel-item").index();
-          FavoriteService.toggle(id+1) //products id start from 1
-          $(this).toggleClass("favorited",FavoriteService.isFavorite(id+1))
+          FavoriteService.toggle(id + 1); //products id start from 1
+          $(this).toggleClass("favorited", FavoriteService.isFavorite(id + 1));
         });
 
         $(".btn-item-add-to-cart").click(function (event) {
