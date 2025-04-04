@@ -175,7 +175,6 @@
             }
 
             .carousel-track-container {
-            
               border-radius: 40px;
               -webkit-box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
               -moz-box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
@@ -220,6 +219,7 @@
             }
 
             .carousel-item {
+
               border: 1px solid #eee;
               border-radius: 10px;
               font-family: Poppins, "cursive";
@@ -415,7 +415,7 @@
 
             @media (max-width: 1480px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 60px) / 4);
+                flex: 0 0 calc((100% - 70px) / 4);
               }
               .ebebek-carousel {
                 max-width: 1100px;
