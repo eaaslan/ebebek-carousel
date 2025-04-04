@@ -419,7 +419,7 @@
 
             @media (max-width: 1049px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 20px) / 2);
+                flex: 0 0 calc((100% - 26px) / 2);
               }
               .ebebek-carousel {
                 max-width: 600px;
