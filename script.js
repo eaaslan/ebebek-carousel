@@ -65,9 +65,8 @@
         // if (window.location.href === "https://www.e-bebek.com/") {
           if(true){
           await getProducts();
-          const products = JSON.parse(localStorage.getItem("products"));
           buildStructure();
-          buildProductCards(products);
+          buildProductCards();
           buildCSS();
           setEvents();
         } else {
@@ -92,11 +91,18 @@
        $(".carousel-container").append(html)
       };
 
-      const buildProductCards = (products) => {
+      const  buildProductCards =  () => {
         const track = $(".carousel-track");
-
+        let products=[]
+        try{
+         products= ProductService.getAll();
+        if(products.length===0 || !(products)){
+          throw new Error("There are no products")
+        }}catch(error){
+            console.error(error)
+            return;
+        }
         products.forEach((product) => {
-
           const discount = Math.floor(
             ((product.original_price - product.price) /
               product.original_price) *
@@ -149,26 +155,6 @@
           track.append(card);
         });
       };
-
-
-
-      // const isFavorite = (id) => {
-      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      //   return favorites.includes(id);
-      // };
-
-      // const addToFavorites = (id) => {
-      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      //   if (favorites.includes(id)) return;
-      //   favorites.push(id);
-      //   localStorage.setItem("favorites", JSON.stringify(favorites));
-      // };
-
-      // const removeFromFavorites = (id) => {
-      //   const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-      //   const newFavorites = favorites.filter((favorite) => favorite !== id);
-      //   localStorage.setItem("favorites", JSON.stringify(newFavorites));
-      // };
 
       const buildCSS = () => {
         const css = `
@@ -444,12 +430,12 @@
         $("head").append(css);
       };
 
-      const fetchProducts = async () => {
-        const response = await fetch(url);
-        const data = await response.json();
-        localStorage.setItem("products", JSON.stringify(data));
-        return data;
-      };
+      // const fetchProducts = async () => {
+      //   const response = await fetch(url);
+      //   const data = await response.json();
+      //   localStorage.setItem("products", JSON.stringify(data));
+      //   return data;
+      // };
 
       const addProductBadges = (dummyBadgeData, productId) => {
         const badgeData = dummyBadgeData.find(
@@ -479,11 +465,36 @@
         return stars;
       };
 
+      const ProductService = {
 
+        API:"https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json",
+        storageKey:"products",
+
+        async fetch (){
+          try{
+            const response= await fetch(this.API)
+            if(!response.ok){
+              throw new Error("Error while fetching "+response.status)
+            }
+            const data= await  response.json()
+            localStorage.setItem(this.storageKey,JSON.stringify(data))
+          }catch(error){
+            console.log("Catched error: "+error)
+          }
+        },
+        async getOrFetch(){
+          const products=this.getAll();
+          console.log(products)
+          if(products.length===0){
+            return await this.fetch()
+          }
+        },
+        getAll(){
+          return JSON.parse(localStorage.getItem(this.storageKey))|| []
+        }
+      }
       const FavoriteService={
-
       storageKey:"favorites",
-
       getAll(){
           return JSON.parse(localStorage.getItem(this.storageKey)) || []
       },
@@ -569,11 +580,7 @@
       };
 
       const getProducts = async () => {
-        const products = JSON.parse(localStorage.getItem("products"));
-        if (!products) {
-          await fetchProducts();
-        }
-        return products;
+        return ProductService.getOrFetch()
       };
       init();
     })();
