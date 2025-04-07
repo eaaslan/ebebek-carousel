@@ -10,8 +10,7 @@
       const url =
         "https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json";
 
-      let currentIndex = 0;
-      let currentPosition = 0;
+      
 
       // i created dummy data for rating and badge due to lack of data in the given api
       const dummyRatingData = [
@@ -62,8 +61,8 @@
       ];
 
       const init = async () => {
-        // if (window.location.href === "https://www.e-bebek.com/") {
-          if(true){
+        if (window.location.href === "https://www.e-bebek.com/") {
+          // if(true){
           await getProducts();
           buildStructure();
           buildProductCards();
@@ -87,8 +86,8 @@
                 </div>
             </div>
         `;
-       // $(".Section2A").prepend(html);
-       $(".carousel-container").append(html)
+       $(".Section2A").prepend(html);
+      //  $(".carousel-container").append(html)
       };
 
       const  buildProductCards =  () => {
@@ -109,8 +108,8 @@
               100
           );
           const card = `
-                <a href="${product.url}" target="_blank" class="carousel-item">
-                    <div class="product-item-img">
+                <a href="${product.url}" target="_blank" class="carousel-item" data-id=${product.id}>
+                    <div class="product-item-img" >
                       <div class=product-item-multiple-badges>
                        ${addProductBadges(dummyBadgeData, product.id)}
                       </div>
@@ -169,13 +168,13 @@
               -moz-box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
               box-shadow: 8px 8px 15px 0px rgba(242, 242, 242, 1);
               border-top-right-radius: 0;
+                overflow: hidden;
             }
             .ebebek-carousel {
               max-width: 1320px;
               margin: 0 auto;
               padding: 20px;
             }
-
             .carousel-title {
               display: flex;
               align-items: center;
@@ -190,55 +189,44 @@
               line-height: 1.11;
               color: #f28e00;
             }
-
             .carousel-container {
               position: relative;
               margin-bottom: 20px;
             }
-
-            .carousel-track-container {
-              overflow: hidden;
-            }
             .carousel-track {
               display: flex;
-              gap: 20px;
+              gap: 17px;
               transition: transform 0.25s ease-in-out;
               border-radius: 10px;
             }
-
-            .carousel-item {
-              flex: 0 0 calc((100% - 60px) / 6);
+            .carousel-item{
+              flex: 0 0 calc((100% - 83px) / 5);
               border: 1px solid #eee;
               border-radius: 10px;
               font-family: Poppins, "cursive";
               color: #7d7d7d;
               font-size: 12px;
-              padding: 2.5px;
+              padding: 2px;
               margin: 16px 0 22px 3px;
               position: relative;
               box-sizing: border-box;
               text-decoration: none;
             }
-
             .carousel-item:hover {
-              box-shadow: 0 0 0 0 #00000030, inset 0 0 0 3px #f28e00;
+              box-shadow: 0 0 0 0 #00000030,inset 0 0 0 2px #f28e00;
               color: #7d7d7d !important;
             }
-
             .product-item-img {
               position: relative;
             }
-
             .product-img {
               object-fit: contain;
               margin-bottom: 10px;
             }
-
             .product-img img {
               width: 100%;
               height: 100%;
             }
-
             .product-item-multiple-badges {
               display: flex;
               flex-direction: column;
@@ -257,24 +245,20 @@
               border-radius: 50%;
               box-shadow: 0 2px 4px 0 #00000024;
             }
-
             .favorite-btn {
               width:100%;
               height: 100%;
               border: none;
               background: url('https://www.e-bebek.com/assets/svg/default-favorite.svg') no-repeat center;
             }
-
             .favorite-btn:hover {
               cursor: pointer;
               background: url('https://www.e-bebek.com/assets/svg/default-hover-favorite.svg') no-repeat center;
             }
-
            .favorite-btn-wrapper.favorited .favorite-btn {
               background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 23"><path fill="%23FF8A00" fill-rule="evenodd" clip-rule="evenodd" d="M22.6339 2.97449C21.4902 1.83033 19.9388 1.1875 18.3211 1.1875C16.7034 1.1875 15.152 1.83033 14.0084 2.97449L12.8332 4.14968L11.658 2.97449C9.27612 0.592628 5.41435 0.592627 3.03249 2.97449C0.650628 5.35635 0.650628 9.21811 3.03249 11.6L4.20769 12.7752L12.8332 21.4007L21.4587 12.7752L22.6339 11.6C23.778 10.4564 24.4208 8.90494 24.4208 7.28723C24.4208 5.66952 23.778 4.11811 22.6339 2.97449Z" stroke="%23FF8A00" stroke-width="2.17391" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center;
               background-size: 25px;
             }
-
             .carousel-btn {
               height: 50px;
               width: 50px;
@@ -389,60 +373,60 @@
 
             @media (max-width: 1480px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 60px) / 4);
+                flex: 0 0 calc((100% - 62px) / 4);
               }
               .ebebek-carousel {
-                max-width: 1100px;
+                max-width: 1200px;
               }
             }
 
             @media (max-width: 1280px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 40px) / 3);
+                flex: 0 0 calc((100% - 42px) / 3);
               }
               .ebebek-carousel {
-                max-width: 900px;
+                max-width: 970px;
               }
             }
 
-            @media (max-width: 1049px) {
+             @media (max-width: 990px) {
               .carousel-item {
-                flex: 0 0 calc((100% - 20px) / 2);
+                flex: 0 0 calc((100% - 22px) / 2);
               }
               .ebebek-carousel {
-                max-width: 600px;
+                max-width: 730px;
               }
             }
-            @media (max-width: 576px) {
+               @media (max-width: 768px) {
+              .carousel-item {
+                flex: 0 0 calc((100% - 22px) / 2);
+              }
               .ebebek-carousel {
-                max-width: 500px;
+               max-width: 550px;
               }
             }
-
-            @media (max-width: 400px) {
-              .ebebek-carousel {
-                max-width: 400px;
+             @media (max-width: 574px) {
+              .carousel-item {
+                flex: 0 0 calc((100% - 22px) / 2);
+                min-width:0 !important
               }
+              .ebebek-carousel {
+               max-width: 100vw;
+               
+              }
+               .carousel-btn{
+               display:none}
             }
 
           </style>
         `;
-        $("head").append(css);
+        $(document.head).append(css);
       };
-
-      // const fetchProducts = async () => {
-      //   const response = await fetch(url);
-      //   const data = await response.json();
-      //   localStorage.setItem("products", JSON.stringify(data));
-      //   return data;
-      // };
-
       const addProductBadges = (dummyBadgeData, productId) => {
         const badgeData = dummyBadgeData.find(
           (data) => data.productId === productId
         );
         if (!badgeData) return "";
-
         return badgeData.badges.map((badge) => `<img src=${badge}>`).join("");
       };
       const setRatingStars = (dummyRatingData, productId) => {
@@ -501,7 +485,6 @@
 
       add(productId){
           const favorites=this.getAll()
-          console.log(favorites.includes(4))
           if(!favorites.includes(productId)) {
             favorites.push(productId) 
           localStorage.setItem(this.storageKey,JSON.stringify(favorites))
@@ -509,10 +492,9 @@
       },
 
       remove(productId){
-          const favorites=this.getAll()
-         const updatedFavorites= favorites.filter(itemId=> itemId!==productId)
-
-          localStorage.setItem(this.storageKey,JSON.stringify(updatedFavorites))
+        const favorites=this.getAll()
+        const updatedFavorites= favorites.filter(itemId=> itemId!==productId)
+        localStorage.setItem(this.storageKey,JSON.stringify(updatedFavorites))
       },
 
       toggle(productId){
@@ -522,9 +504,7 @@
       isFavorite(productId){
         return this.getAll().includes(productId)
       }
-
       }
-
       const setEvents = () => {
         const track = $(".carousel-track");
 
@@ -537,22 +517,25 @@
           return 2;
         };
 
-        let items = $(".carousel-item").outerWidth(true);
-        let maxIndex = $(".carousel-item").length - getItemsPerScreen();
+        const carouselItem=$(".carousel-item")
+        let cardWidth = carouselItem.outerWidth(true);
+        let maxIndex = carouselItem.length - getItemsPerScreen();
+        const gapSize=  parseInt((window.getComputedStyle($(".carousel-track")[0]).getPropertyValue('gap')))||20
+        let currentIndex = 0;
+        let currentPosition = 0;
 
         $(".next-btn").click(() => {
+        
           if (currentIndex >= maxIndex) return;
-          currentPosition -= items + 20;
-          track.css("transform", `translateX(${currentPosition}px)`);
-          currentPosition++;
+          currentPosition -= cardWidth + gapSize;
+          track.css("transform", `translateX(-${(cardWidth + gapSize)*(currentIndex+1)}px)`);
           currentIndex++;
         });
 
         $(".prev-btn").click(() => {
           if (currentIndex <= 0) return;
-          currentPosition += items + 20;
+          currentPosition += cardWidth + gapSize;
           track.css("transform", `translateX(${currentPosition}px)`);
-          currentPosition--;
           currentIndex--;
         });
 
@@ -564,14 +547,15 @@
             `translateX(${currentPosition}px)`
           );
           maxIndex = $(".carousel-item").length - getItemsPerScreen();
-          items = $(".carousel-item").outerWidth(true);
+          cardWidth = $(".carousel-item").outerWidth(true);
         });
 
-        $(".favorite-btn-wrapper").click(function (event) {
+        $(".favorite-btn").click(function (event) {
           event.preventDefault();
-          const id = $(this).closest(".carousel-item").index();
-          FavoriteService.toggle(id+1) //products id start from 1
-          $(this).toggleClass("favorited",FavoriteService.isFavorite(id+1))
+          const id = Number( $(this).closest(".carousel-item").attr("data-id"))
+          console.log(id)
+          FavoriteService.toggle(id)
+          $(this).closest(".favorite-btn-wrapper").toggleClass("favorited",FavoriteService.isFavorite(id))
         });
 
         $(".btn-item-add-to-cart").click(function (event) {
