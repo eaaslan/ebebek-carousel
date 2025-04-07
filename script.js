@@ -447,12 +447,11 @@
             const data= await  response.json()
             localStorage.setItem(this.storageKey,JSON.stringify(data))
           }catch(error){
-            console.log("Catched error: "+error)
+            console.error("Catched error: "+error)
           }
         },
         async getOrFetch(){
           const products=this.getAll();
-          console.log(products)
           if(products.length===0){
             return await this.fetch()
           }
@@ -548,7 +547,6 @@
         $(".favorite-btn").click(function (event) {
           event.preventDefault();
           const id = Number( $(this).closest(".carousel-item").attr("data-id"))
-          console.log(id)
           FavoriteService.toggle(id)
           $(this).closest(".favorite-btn-wrapper").toggleClass("favorited",FavoriteService.isFavorite(id))
         });
