@@ -7,11 +7,6 @@
 
   jqueryScript.onload = () => {
     (() => {
-      const url =
-        "https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json";
-
-      
-
       // i created dummy data for rating and badge due to lack of data in the given api
       const dummyRatingData = [
         { productId: 1, rating: 5, count: 10 },
@@ -22,7 +17,6 @@
         { productId: 7, rating: 4, count: 5 },
         { productId: 8, rating: 3, count: 2 },
       ];
-
       const dummyBadgeData = [
         {
           productId: 1,
@@ -59,7 +53,6 @@
           ],
         },
       ];
-
       const init = async () => {
         if (window.location.href === "https://www.e-bebek.com/") {
           // if(true){
@@ -72,7 +65,9 @@
           console.error("This script only works on homepage");
         }
       };
-
+      const getProducts =() => {
+        return ProductService.getOrFetch()
+      };
       const buildStructure = () => {
         const html = `
              <div class="ebebek-carousel">
@@ -87,11 +82,9 @@
             </div>
         `;
        $(".Section2A").prepend(html);
-      //  $(".carousel-container").append(html)
+      // $(".carousel-container").append(html)
       };
-
       const  buildProductCards =  () => {
-        const track = $(".carousel-track");
         let products=[]
         try{
          products= ProductService.getAll();
@@ -151,10 +144,9 @@
                 </a>
             `;
 
-          track.append(card);
+            $(".carousel-track").append(card);
         });
       };
-
       const buildCSS = () => {
         const css = `
         <style>
@@ -269,31 +261,26 @@
               border-radius: 50%;
               cursor: pointer;
             }
-
             .prev-btn {
               left: -65px;
               background: url(https://cdn06.e-bebek.com/assets/svg/prev.svg) no-repeat;
               background-position: 18px;
               background-color: #fef6eb;
             }
-
             .next-btn {
               right: -65px;
               background: url(https://cdn06.e-bebek.com/assets/svg/next.svg) no-repeat;
               background-position: 18px;
               background-color: #fef6eb;
             }
-
             .product-item-content {
               padding: 0 17px 17px;
             }
-
             .product-item-rating {
               display: flex;
               gap: 5px;
               margin-bottom:8px;
             }
-
             .product-item-title {
             margin-top:50px;
               min-height: 56px;
@@ -379,7 +366,6 @@
                 max-width: 1200px;
               }
             }
-
             @media (max-width: 1280px) {
               .carousel-item {
                 flex: 0 0 calc((100% - 42px) / 3);
@@ -388,7 +374,6 @@
                 max-width: 970px;
               }
             }
-
              @media (max-width: 990px) {
               .carousel-item {
                 flex: 0 0 calc((100% - 22px) / 2);
@@ -448,7 +433,6 @@
         }
         return stars;
       };
-
       const ProductService = {
 
         API:"https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json",
@@ -506,7 +490,9 @@
       }
       }
       const setEvents = () => {
-        const track = $(".carousel-track");
+        const $track = $(".carousel-track");
+        const carouselItem=$(".carousel-item")
+        const gapSize=  parseInt((window.getComputedStyle($(".carousel-track")[0]).getPropertyValue('gap')))||20
 
         const getItemsPerScreen = () => {
           const width = $(window).width();
@@ -517,39 +503,48 @@
           return 2;
         };
 
-        const carouselItem=$(".carousel-item")
-        let cardWidth = carouselItem.outerWidth(true);
+        let cardWidth = carouselItem.eq(0).outerWidth(true);
         let maxIndex = carouselItem.length - getItemsPerScreen();
-        const gapSize=  parseInt((window.getComputedStyle($(".carousel-track")[0]).getPropertyValue('gap')))||20
         let currentIndex = 0;
-        let currentPosition = 0;
+        let nextPosition=0
+
+        let isAnimating=false;
+        const transitionDuration=200;
 
         $(".next-btn").click(() => {
-        
-          if (currentIndex >= maxIndex) return;
-          currentPosition -= cardWidth + gapSize;
-          track.css("transform", `translateX(-${(cardWidth + gapSize)*(currentIndex+1)}px)`);
-          currentIndex++;
+          if (currentIndex >= maxIndex || isAnimating) return;
+          isAnimating=true
+          nextPosition=(++currentIndex)*(cardWidth + gapSize)
+          $track.css("transform", `translateX(-${nextPosition}px)`);
+
+          setTimeout(()=>{isAnimating=false;},transitionDuration)
         });
 
         $(".prev-btn").click(() => {
-          if (currentIndex <= 0) return;
-          currentPosition += cardWidth + gapSize;
-          track.css("transform", `translateX(${currentPosition}px)`);
-          currentIndex--;
-        });
+          if (currentIndex < 1 ||isAnimating) return;
+          isAnimating=true;
+          nextPosition=(--currentIndex)*(cardWidth + gapSize)
+          $track.css("transform", `translateX(-${nextPosition}px)`);
 
-        $(window).on("resize", function () {
-          currentPosition = 0;
+          setTimeout(()=>{isAnimating=false},transitionDuration)
+        });
+        const debounce = (func, delay) => {
+          let timer;
+          return function(...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, args), delay);
+          };
+        };
+        $(window).on("resize", debounce(function () {
+          nextPosition = 0;
           currentIndex = 0;
           $(".carousel-track").css(
             "transform",
-            `translateX(${currentPosition}px)`
+            `translateX(${nextPosition}px)`
           );
-          maxIndex = $(".carousel-item").length - getItemsPerScreen();
-          cardWidth = $(".carousel-item").outerWidth(true);
-        });
-
+          maxIndex = carouselItem.length - getItemsPerScreen();
+          cardWidth = carouselItem.outerWidth(true);
+        },250))
         $(".favorite-btn").click(function (event) {
           event.preventDefault();
           const id = Number( $(this).closest(".carousel-item").attr("data-id"))
@@ -557,14 +552,9 @@
           FavoriteService.toggle(id)
           $(this).closest(".favorite-btn-wrapper").toggleClass("favorited",FavoriteService.isFavorite(id))
         });
-
         $(".btn-item-add-to-cart").click(function (event) {
           event.preventDefault();
         });
-      };
-
-      const getProducts = async () => {
-        return ProductService.getOrFetch()
       };
       init();
     })();
